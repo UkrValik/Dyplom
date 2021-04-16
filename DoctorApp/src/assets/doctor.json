@@ -1,0 +1,10 @@
+{
+    "firstName": "Валентин",
+    "lastName": "Краснюкевич",
+    "email": "krasniukevich@gmail.com",
+    "consultations": 23,
+    "positiveMarks": 17,
+    "negativeMarks": 0,
+    "avatar": "/home/valentyn/Documents/Dyplom/DoctorApp/src/assets/avatar.png",
+    "price": 100
+}
