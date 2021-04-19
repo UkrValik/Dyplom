@@ -1,0 +1,12 @@
+{
+  "name": "PatientApp",
+  "displayName": "PatientApp",
+  "expo": {
+    "name": "PatientApp",
+    "slug": "PatientApp",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
