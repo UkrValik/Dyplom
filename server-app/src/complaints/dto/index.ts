@@ -1,0 +1,1 @@
+export { CreateComplaintDto } from './create-complaint.dto';
