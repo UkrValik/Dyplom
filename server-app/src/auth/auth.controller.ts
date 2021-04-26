@@ -5,6 +5,7 @@ import { RegisterUserDto } from './dto';
 import { RequestWithUser } from './requestWithUser.interface';
 import { LocalAuthGuard } from './localAuth.guard';
 import JwtAuthGuard from './jwtAuth.guard';
+import { Role } from 'src/roles/role.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +13,11 @@ export class AuthController {
 
     @Post('register')
     async register(@Body() registerUserDto: RegisterUserDto) {
-        return this.authService.registerUser(registerUserDto);
+        if (registerUserDto.roles.includes(Role.Doctor)) {
+            return this.authService.registerDoctor(registerUserDto);
+        } else {
+            return this.authService.registerPatient(registerUserDto);
+        }
     }
 
     @Post('log-in')

@@ -14,10 +14,25 @@ export class AuthService {
         private readonly configService: ConfigService,
     ) {}
 
-    public async registerUser(registerUserDto: RegisterUserDto) {
+    public async registerPatient(registerUserDto: RegisterUserDto) {
         const hashedPassword = await hash(registerUserDto.password, 10);
         try {
-            let createdUser = await this.userService.create({
+            let createdUser = await this.userService.createPatient({
+                ...registerUserDto,
+                password: hashedPassword,
+            });
+            createdUser.password = undefined;
+            return createdUser;
+        } catch(error) {
+            console.log(error);
+            throw new HttpException('Something went wrong', HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public async registerDoctor(registerUserDto: RegisterUserDto) {
+        const hashedPassword = await hash(registerUserDto.password, 10);
+        try {
+            let createdUser = await this.userService.createDoctor({
                 ...registerUserDto,
                 password: hashedPassword,
             });

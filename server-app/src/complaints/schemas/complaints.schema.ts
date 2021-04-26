@@ -6,13 +6,16 @@ export type ComplaintDocument = Complaint & Document;
 @Schema()
 export class Complaint {
     @Prop()
-    text: string
+    text: string;
 
     @Prop()
-    doctor: string
+    doctor: string;
 
     @Prop()
-    dateTime: string
+    dateTime: string;
+
+    @Prop()
+    published: boolean;
 }
 
 export const ComplaintSchema = SchemaFactory.createForClass(Complaint);
