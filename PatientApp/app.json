@@ -1,6 +1,7 @@
 {
   "name": "PatientApp",
   "displayName": "PatientApp",
+  "sdkVersion": "41.0.0",
   "expo": {
     "name": "PatientApp",
     "slug": "PatientApp",
