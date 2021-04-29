@@ -32,4 +32,8 @@ export class ComplaintsService {
     findAll(): Promise<Complaint[]> {
         return this.complaintModel.find().exec();
     }
+
+    findById(id: ObjectId): Promise<Complaint> {
+        return this.complaintModel.findOne({_id: id}).exec();
+    }
 }

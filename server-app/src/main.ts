@@ -5,6 +5,7 @@ import { set } from 'mongoose';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   set('useNewUrlParser', true);
   set('useFindAndModify', false);
   set('useCreateIndex', true);
