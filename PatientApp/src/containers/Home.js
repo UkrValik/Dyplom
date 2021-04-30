@@ -1,13 +1,36 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, SafeAreaView } from 'react-native';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../redux/reducers/user';
 
 const Home = (props) => {
 
+    const user = useSelector(selectUser);
+
     return (
-        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-            <Text style={{fontSize: 30}}>
-                Home page
-            </Text>
+        <View style={{backgroundColor: '#FEFDEB', flex: 1}}>
+            <SafeAreaView>
+                <View style={{
+                    marginVertical: '2%',
+                    marginLeft: '5%',
+                    }}>
+                    <Text style={{
+                        fontSize: 20,
+                        }}>
+                        {user.username}
+                    </Text>
+                </View>
+                <View style={{
+                    marginVertical: '2%',
+                    marginLeft: '5%',
+                    }}>
+                    <Text style={{
+                        fontSize: 20,
+                        }}>
+                        {user.complaint._id}
+                    </Text>
+                </View>
+            </SafeAreaView>
         </View>
     );
 }

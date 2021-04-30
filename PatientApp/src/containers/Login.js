@@ -20,6 +20,10 @@ const Login = (props) => {
         passwordField.current.blur();
     }
 
+    const makeLogin = (username, password) => {
+        dispatch(login({username, password}));
+    }
+
     return (
         <TouchableWithoutFeedback onPress={() => blurInput()}>
             <View style={{
@@ -71,7 +75,7 @@ const Login = (props) => {
                         secureTextEntry
                         />
                 </View>
-                <TouchableNativeFeedback onPress={() => dispatch(login({username, password}))}>
+                <TouchableNativeFeedback onPress={() => makeLogin(username, password)}>
                     <View style={{
                         borderRadius: 10,
                         backgroundColor: '#77ABCF',
