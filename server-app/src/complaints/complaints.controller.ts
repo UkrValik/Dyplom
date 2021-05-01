@@ -25,7 +25,8 @@ export class ComplaintsController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     publishById(@Req() request: RequestWithUser) {
         const {user} = request;
-        return this.complaintsService.publishById(user.complaint._id);
+        const {dateTime} = request.body;
+        return this.complaintsService.publishById(user.complaint._id, dateTime);
     }
 
     @Post('hide')

@@ -1,8 +1,8 @@
 import { Model } from 'mongoose';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus   } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
-import { CreateUserDto } from './dto';
+import { CreateUserDto, UpdateUserDataDto } from './dto';
 import { ComplaintsService } from 'src/complaints/complaints.service';
 
 @Injectable()
@@ -32,5 +32,14 @@ export class UserService {
     async createDoctor(createUserDto: CreateUserDto) {
         const createdUser = new this.userModel(createUserDto);
         return createdUser.save();
+    }
+
+    async updateUserDataById(updateUserDataDto: UpdateUserDataDto) {
+        const user = await this.userModel.findOneAndUpdate({_id: updateUserDataDto._id}, {
+            firstname: updateUserDataDto.firstname,
+            lastname: updateUserDataDto.lastname,
+        });
+        user.password = undefined;
+        return user;
     }
 }

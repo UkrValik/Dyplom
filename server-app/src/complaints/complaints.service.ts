@@ -17,8 +17,8 @@ export class ComplaintsService {
         return this.complaintModel.findByIdAndUpdate(complaintId, updateComplaintDto);
     }
 
-    async publishById(complaintId: ObjectId) {
-        return this.complaintModel.findByIdAndUpdate(complaintId, {published: true});
+    async publishById(complaintId: ObjectId, dateTime: string) {
+        return this.complaintModel.findByIdAndUpdate(complaintId, {published: true, dateTime});
     }
 
     async hideById(complaintId: ObjectId) {

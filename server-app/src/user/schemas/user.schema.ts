@@ -18,6 +18,12 @@ export class User {
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Complaint' })
     complaint: ComplaintDocument;
+
+    @Prop()
+    firstname: string;
+
+    @Prop()
+    lastname: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
