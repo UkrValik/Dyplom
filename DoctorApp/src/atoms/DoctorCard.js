@@ -1,13 +1,28 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Modal } from 'react-native';
+import { useSelector } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
+import colors from '../styles/colors.json';
+import { selectUser } from '../redux/reducers/user';
 import fonts from '../styles/fonts.json';
+import ModalUserDataModifier from './ModalUserDataModifier';
 
 const DoctorCard = (props) => {
 
-    const avatar = props.doctor.avatar;
+    const user = useSelector(selectUser);
+    console.log(user);
+
+    const [dataModalVisible, setDataModalVisible] = React.useState(false);
 
     return (
         <View>
+            <Modal
+                visible={dataModalVisible}
+                >
+                <ModalUserDataModifier 
+                    setDataModalVisible={setDataModalVisible}
+                    />
+            </Modal>
             <View
                 style={{
                     paddingVertical: '3%',
@@ -45,7 +60,7 @@ const DoctorCard = (props) => {
                             fontWeight: '700',
                         }}
                         >
-                        {props.doctor.firstName}
+                        {user.firstname || 'вкажіть імʼя'}
                     </Text>
                     <Text
                         style={{
@@ -54,8 +69,20 @@ const DoctorCard = (props) => {
                             fontWeight: '700',
                         }}
                         >
-                        {props.doctor.lastName}
+                        {user.lastname || 'вкажіть прізвище'}
                     </Text>
+                </View>
+                <View
+                    style={{
+                    }}
+                    >
+                    <Ionicons
+                        style={{padding: 10}}
+                        name='md-reader-outline'
+                        size={24}
+                        color={colors.iceberg}
+                        onPress={() => setDataModalVisible(true)}
+                        />
                 </View>
             </View>
             <View style={{backgroundColor: '#FFF'}}>

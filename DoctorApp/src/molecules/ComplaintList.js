@@ -33,7 +33,7 @@ const ComplaintList = (props) => {
             <ScrollView>
                 {props.complaints.map(complaint => (
                     <ComplaintItem
-                        key={complaint.id}
+                        key={complaint._id}
                         complaint={complaint}
                         showFullId={props.showFullId}
                         setId={props.setId}

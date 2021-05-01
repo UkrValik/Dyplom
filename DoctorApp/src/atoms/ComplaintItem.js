@@ -52,10 +52,10 @@ const ComplaintItem = (props) => {
     }
 
     const onPress = () => {
-        if (props.complaint.id === props.showFullId) {
+        if (props.complaint._id === props.showFullId) {
             props.setId(undefined);
         } else {
-            props.setId(props.complaint.id);
+            props.setId(props.complaint._id);
         }
     }
 
@@ -73,7 +73,7 @@ const ComplaintItem = (props) => {
                     marginRight: '3%',
                     textAlign: 'right',
                     }}>
-                    {date(props.complaint.date)}
+                    {date(props.complaint.dateTime)}
                 </Text>
                 <View>
                     <View style={{
@@ -101,10 +101,10 @@ const ComplaintItem = (props) => {
                             fontSize: 16,
                             flex: 2,
                             }}>
-                            {text(props.complaint.text, props.showFullId === props.complaint.id)}
+                            {text(props.complaint.text, props.showFullId === props.complaint._id)}
                         </Text>
                     </View>
-                    {props.showFullId === props.complaint.id && <TouchableNativeFeedback>
+                    {props.showFullId === props.complaint._id && <TouchableNativeFeedback>
                         <View style={{
                             alignItems: 'center',
                             marginVertical: 10,
