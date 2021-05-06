@@ -5,14 +5,18 @@ import { Ionicons } from '@expo/vector-icons';
 import colors from '../styles/colors.json';
 import { selectUser } from '../redux/reducers/user';
 import fonts from '../styles/fonts.json';
-import ModalUserDataModifier from './ModalUserDataModifier';
+import ModalUserDataModifier from '../atoms/ModalUserDataModifier';
+import ModalAvatarUpload from '../atoms/ModalAvatarUpload';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { baseUrl } from '../config.json';
 
 const DoctorCard = (props) => {
 
     const user = useSelector(selectUser);
-    console.log(user);
+    const uri = baseUrl + '/user/' + user._id + '/avatar';
 
     const [dataModalVisible, setDataModalVisible] = React.useState(false);
+    const [avatarModalVisible, setAvatarModalVisible] = React.useState(false);
 
     return (
         <View>
@@ -21,6 +25,11 @@ const DoctorCard = (props) => {
                 >
                 <ModalUserDataModifier 
                     setDataModalVisible={setDataModalVisible}
+                    />
+            </Modal>
+            <Modal visible={avatarModalVisible}>
+                <ModalAvatarUpload
+                    setAvatarModalVisible={setAvatarModalVisible}
                     />
             </Modal>
             <View
@@ -34,17 +43,34 @@ const DoctorCard = (props) => {
                     style={{
                         flex: 1,
                         alignItems: 'center',
+                        justifyContent: 'center',
                     }}
                     >
-                    <Image
-                        source={require('/home/valentyn/Documents/Dyplom/DoctorApp/src/assets/avatar.png')}
-                        resizeMode='cover'
-                        style={{
-                            width: 100,
-                            height: 100,
-                            borderRadius: 50,
-                        }}
-                        />
+                    {user.avatar ?
+                        <TouchableWithoutFeedback onPress={() => setAvatarModalVisible(true)}>
+                            <Image
+                                source={{
+                                    uri: uri,
+                                    headers: {
+                                        some: user.avatar,
+                                    }
+                                }}
+                                resizeMode='cover'
+                                style={{
+                                    width: 100,
+                                    height: 100,
+                                    borderRadius: 50,
+                                }}
+                                />
+                        </TouchableWithoutFeedback>
+                    :
+                        <Ionicons
+                            name='add'
+                            size={100}
+                            color={colors.iceberg}
+                            onPress={() => setAvatarModalVisible(true)}
+                            />
+                    }
                 </View>
                 <View
                     style={{

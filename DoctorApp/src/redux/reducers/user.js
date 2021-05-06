@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { create } from 'react-test-renderer';
 import config from '../../config.json';
 
 export const login = createAsyncThunk('user/login', async params => {
@@ -67,6 +68,25 @@ export const updateUserData = createAsyncThunk('user/updateData', async params =
     return status;
 });
 
+export const uploadAvatar = createAsyncThunk('user/avatar', async params => {
+    const response = await fetch(config.baseUrl + '/user/' + params.user_id + '/avatar', {
+        method: 'POST',
+        body: params.formData,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    const userResponse = await fetch(config.baseUrl + '/user/' + params.user_id);
+    const userJSON = await userResponse.json();
+    return userJSON;
+});
+
+export const refreshUser = createAsyncThunk('user/refresh', async params => {
+    const response = await fetch(config.baseUrl + '/user/' + params.user_id);
+    const resJSON = await response.json();
+    return resJSON;
+});
+
 const initialState = {
     _id: undefined,
     token: undefined,
@@ -75,6 +95,9 @@ const initialState = {
     username: '',
     firstname: '',
     lastname: '',
+    avatar: '',
+    avatarUploading: false,
+    userLoading: false,
     complaints: [],
 };
 
@@ -97,6 +120,7 @@ export const userSlice = createSlice({
             state._id = action.payload.user._id;
             state.firstname = action.payload.user.firstname;
             state.lastname = action.payload.user.lastname;
+            state.avatar = action.payload.user.avatar;
         },
         [login.rejected]: (state, action) => {
             state.error = action.error;
@@ -118,7 +142,23 @@ export const userSlice = createSlice({
         },
         [getAllComplaints.fulfilled]: (state, action) => {
             state.complaints = action.payload;
-        }
+        },
+        [uploadAvatar.fulfilled]: (state, action) => {
+            state.avatar = action.payload.avatar;
+            state.avatarUploading = false;
+        },
+        [uploadAvatar.pending]: (state) => {
+            state.avatarUploading = true;
+        },
+        [refreshUser.fulfilled]: (state, action) => {
+            state.firstname = action.payload.firstname;
+            state.lastname = action.payload.lastname;
+            state.avatar = action.payload.avatar;
+            state.userLoading = false;
+        },
+        [refreshUser.pending]: (state) => {
+            state.userLoading = true;
+        },
     }
 });
 

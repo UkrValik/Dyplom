@@ -82,7 +82,11 @@ const ModalUserDataModifier = (props) => {
                 <View
                     style={{
                         marginTop: '5%',
-                        marginBottom: buttonMargin
+                        marginBottom: buttonMargin,
+                        backgroundColor: '#FFF',
+                        borderRadius: 5,
+                        borderColor: colors.ashGrey,
+                        borderWidth: 0.5,
                     }}
                     >
                     <Button
