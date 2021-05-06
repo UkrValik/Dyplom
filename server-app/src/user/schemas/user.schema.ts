@@ -24,6 +24,15 @@ export class User {
 
     @Prop()
     lastname: string;
+
+    @Prop()
+    active: boolean;
+
+    @Prop()
+    working: boolean;
+
+    @Prop()
+    avatar: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

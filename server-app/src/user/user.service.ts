@@ -42,4 +42,22 @@ export class UserService {
         user.password = undefined;
         return user;
     }
+
+    async getActiveDoctors() {
+        const activeDoctors = await this.userModel.find({roles: {$elemMatch: ['doctor']}}).exec();
+        return activeDoctors;
+    }
+
+    async activateDoctor(doctor: UserDocument) {
+        let newDoctor = doctor;
+        if (doctor.firstname && doctor.lastname) {
+            newDoctor = await this.userModel.findOneAndUpdate({_id: doctor._id}, {active: true});
+        }
+        return newDoctor;
+    }
+
+    async setAvatar(user_id: string, avatar: string) {
+        const newUser = await this.userModel.findOneAndUpdate({_id: user_id}, {avatar: avatar});
+        return newUser;
+    }
 }
