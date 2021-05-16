@@ -7,6 +7,9 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { RolesModule } from './roles/roles.module';
+import { ChatModule } from './chat/chat.module';
+import { ConsultationModule } from './consultation/consultation.module';
+import { ChatroomModule } from './chatroom/chatroom.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -22,6 +25,9 @@ import * as Joi from '@hapi/joi';
       }),
     }),
     RolesModule,
+    ChatModule,
+    ConsultationModule,
+    ChatroomModule,
   ],
   controllers: [AppController],
   providers: [AppService],

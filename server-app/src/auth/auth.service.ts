@@ -71,4 +71,10 @@ export class AuthService {
             throw new HttpException('Wrong credentials', HttpStatus.BAD_REQUEST);
         }
     }
+
+    public async verifyUser(token: string) {
+        const res = await this.jwtService.verify(token);
+        const user = await this.userService.getByEmail(res.userId);
+        return user;
+    }
 }

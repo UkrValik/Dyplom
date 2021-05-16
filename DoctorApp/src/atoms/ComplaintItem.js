@@ -1,9 +1,14 @@
 import React from 'react';
-import { View, Text, TouchableNativeFeedback } from 'react-native';
+import { View, Text, TouchableNativeFeedback, Button } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import fonts from '../styles/fonts.json';
 import colors from '../styles/colors.json';
+import { proposeConsultation, selectUser } from '../redux/reducers/user';
 
 const ComplaintItem = (props) => {
+
+    const dispatch = useDispatch();
+    const user = useSelector(selectUser);
 
     const date = (date) => {
         if (new Date().getTime() - new Date(date).getTime() > 84600000) {
@@ -59,6 +64,13 @@ const ComplaintItem = (props) => {
         }
     }
 
+    const proposeConsultationButton = () => {
+        dispatch(proposeConsultation({
+            proposeTo: props.complaint._id,
+            proposeFrom: user._id,
+        }));
+    }
+
     return (
         <TouchableNativeFeedback onPress={() => onPress()}>
             <View style={{
@@ -104,22 +116,25 @@ const ComplaintItem = (props) => {
                             {text(props.complaint.text, props.showFullId === props.complaint._id)}
                         </Text>
                     </View>
-                    {props.showFullId === props.complaint._id && <TouchableNativeFeedback>
-                        <View style={{
-                            alignItems: 'center',
-                            marginVertical: 10,
-                            }}>
-                            <View style={{borderRadius: 5, backgroundColor: colors.iceberg}}>
-                                <Text style={{
-                                    fontFamily: fonts.ios,
-                                    fontSize: 16,
-                                    padding: 5,
-                                    }}>
-                                    Запропонувати консультацію
-                                </Text>
-                            </View>
+                    {props.showFullId === props.complaint._id && (
+                        <View
+                            style={{
+                                height: 40,
+                                justifyContent: 'center',
+                                borderColor: colors.ashGrey,
+                                borderRadius: 5,
+                                borderWidth: 0.5,
+                                backgroundColor: '#FFF',
+                                marginTop: '2%',
+                            }}
+                            >
+                            <Button
+                                title='Запропонувати консультацію'
+                                color={colors.iceberg}
+                                onPress={() => proposeConsultationButton()}
+                                />
                         </View>
-                    </TouchableNativeFeedback>}
+                    )}
                 </View>
             </View>
         </TouchableNativeFeedback>

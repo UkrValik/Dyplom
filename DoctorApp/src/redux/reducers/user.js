@@ -87,6 +87,21 @@ export const refreshUser = createAsyncThunk('user/refresh', async params => {
     return resJSON;
 });
 
+export const proposeConsultation = createAsyncThunk('user/proposeConsultation', async params => {
+    const response = await fetch(config.baseUrl + '/consultation', {
+        method: 'POST',
+        body: JSON.stringify({
+            proposeTo: params.proposeTo,
+            proposeFrom: params.proposeFrom,
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    const resJSON = await response.json();
+    return resJSON;
+});
+
 const initialState = {
     _id: undefined,
     token: undefined,

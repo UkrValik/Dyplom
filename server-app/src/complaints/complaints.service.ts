@@ -33,7 +33,7 @@ export class ComplaintsService {
         return this.complaintModel.find().exec();
     }
 
-    findById(id: ObjectId): Promise<Complaint> {
+    findById(id: ObjectId) {
         return this.complaintModel.findOne({_id: id}).exec();
     }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal, View, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import colors from '../style/colors.json';
-import { publishComplaintData, selectComplaint, publishComplaint, hideComplaint } from '../redux/reducers/user';
+import { publishComplaintData, selectComplaint, publishComplaint, hideComplaint, savePublishDate } from '../redux/reducers/user';
 
 const ComplaintButtons = (props) => {
 
@@ -17,7 +17,9 @@ const ComplaintButtons = (props) => {
     }
 
     const publish = () => {
-        dispatch(publishComplaint());
+        const date = new Date().toISOString();
+        dispatch(savePublishDate(date));
+        dispatch(publishComplaint({date}));
         setModalVisible(false);
     }
 

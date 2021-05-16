@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto, UpdateUserDataDto } from './dto';
 import { ComplaintsService } from 'src/complaints/complaints.service';
+import { Role } from 'src/roles/role.enum';
 
 @Injectable()
 export class UserService {
@@ -11,6 +12,14 @@ export class UserService {
         @InjectModel(User.name) private userModel: Model<UserDocument>,
         private complaintsService: ComplaintsService
         ) {}
+
+    async getById(id: string) {
+        const user = await this.userModel.findOne({_id: id});
+        if (user) {
+            return user;
+        }
+        throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
+    }
 
     async getByEmail(email: string) {
         const user = await this.userModel.findOne({email: email});
@@ -44,7 +53,8 @@ export class UserService {
     }
 
     async getActiveDoctors() {
-        const activeDoctors = await this.userModel.find({roles: {$elemMatch: ['doctor']}}).exec();
+        const activeDoctors = (await this.userModel.find({roles: [Role.Doctor]}).exec());
+        activeDoctors.map(doctor => doctor.password = undefined);
         return activeDoctors;
     }
 

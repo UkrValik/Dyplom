@@ -1,0 +1,1 @@
+export { CreateChatroomDto } from './create-chatroom.dto';

@@ -1,11 +1,11 @@
 import { Req, Body, Controller, Get, Post, UseGuards, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import JwtAuthGuard from 'src/auth/jwtAuth.guard';
 import { RequestWithUser } from 'src/complaints/requestWithUser.interface';
 import { Role } from 'src/roles/role.enum';
 import { Roles } from 'src/roles/roles.decorator';
 import { RolesGuard } from 'src/roles/roles.guard';
-import { UpdateUserDataDto } from './dto';
+import { GetDoctorAvatarDto, UpdateUserDataDto } from './dto';
 import { UserService } from './user.service';
 import { UseInterceptors, UploadedFile } from  '@nestjs/common';
 import { diskStorage } from  'multer';
@@ -63,7 +63,6 @@ export class UserController {
     downloadAvatar(@Req() request: RequestWithUser, @Res() res: Response) {
         const {user} = request;
         user.password = undefined;
-        res.setHeader('Cache-Control', 'no-cache');
         return res.sendFile(user.avatar.split('avatars/')[1], {root: 'avatars'});
     }
 
@@ -74,5 +73,11 @@ export class UserController {
         const {user} = request;
         user.password = undefined;
         return user;
+    }
+
+    @Get('doctor-avatar/:avatar')
+    @UseGuards(JwtAuthGuard)
+    getDoctorAvatar(@Req() req: Request, @Res() res: Response) {
+        return res.sendFile(req.url.split('avatar/')[1], {root: 'avatars'});
     }
 }

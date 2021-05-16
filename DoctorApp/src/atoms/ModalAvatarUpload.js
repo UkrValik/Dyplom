@@ -60,7 +60,7 @@ const ModalAvatarUpload = (props) => {
             }}
             >
             {
-                user.avatar &&
+                user.avatar ?
                 <View>
                     <Image
                         source={{uri: image || uri}}
@@ -71,6 +71,8 @@ const ModalAvatarUpload = (props) => {
                         }}
                         />
                 </View>
+                :
+                <View></View>
             }
             <View
                 style={{

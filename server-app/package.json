@@ -30,6 +30,8 @@
     "@nestjs/mongoose": "^7.2.4",
     "@nestjs/passport": "^7.1.5",
     "@nestjs/platform-express": "^7.6.15",
+    "@nestjs/platform-socket.io": "^7.6.15",
+    "@nestjs/websockets": "^7.6.15",
     "@types/bcrypt": "^3.0.1",
     "@types/cookie-parser": "^1.4.2",
     "@types/hapi__joi": "^17.1.6",
@@ -45,7 +47,8 @@
     "redux": "^4.1.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.6"
+    "rxjs": "^6.6.6",
+    "socket.io": "^2.4.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",

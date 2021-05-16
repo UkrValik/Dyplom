@@ -1,5 +1,4 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { View, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
 import colors from '../style/colors.json';
 import doctors from '../assets/doctors.json';
@@ -9,7 +8,6 @@ import ComplaintButtons from '../atoms/ComplaintButtons';
 
 const Complaint = (props) => {
 
-    const dispatch = useDispatch();
 
     const inputRef = React.useRef();
 

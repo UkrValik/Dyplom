@@ -67,6 +67,12 @@ export const publishComplaintData = createAsyncThunk('user/publishComplaintData'
 export const publishComplaint = createAsyncThunk('user/publishComplaint', async params => {
     const response = await fetch(config.baseUrl + '/complaints/publish', {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            dateTime: params.date,
+        }),
     });
     const status = response.status;
     return status;
@@ -112,6 +118,9 @@ export const userSlice = createSlice({
         },
         saveComplaintDoctor: (state, action) => {
             state.complaint.doctor = action.payload;
+        },
+        savePublishDate: (state, action) => {
+            state.complaint.publishDate = action.payload;
         }
     },
     extraReducers: {
@@ -123,8 +132,8 @@ export const userSlice = createSlice({
             state._id = action.payload.user._id;
             state.complaint.text = action.payload.complaint.text;
             state.complaint.doctor = action.payload.complaint.doctor;
-            state.published = action.payload.complaint.published;
-            state.publishDate = action.payload.complaint.dateTime;
+            state.complaint.published = action.payload.complaint.published;
+            state.complaint.publishDate = action.payload.complaint.dateTime;
         },
         [login.rejected]: (state, action) => {
             state.error = action.error;
@@ -163,6 +172,7 @@ export const userSlice = createSlice({
 export const {
     saveComplaintText,
     saveComplaintDoctor,
+    savePublishDate,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -30,6 +30,16 @@ const Home = (props) => {
                         {user.complaint._id}
                     </Text>
                 </View>
+                <View style={{
+                    marginVertical: '2%',
+                    marginLeft: '5%',
+                    }}>
+                    <Text style={{
+                        fontSize: 20,
+                        }}>
+                        {user._id}
+                    </Text>
+                </View>
             </SafeAreaView>
         </View>
     );

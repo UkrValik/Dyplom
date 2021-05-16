@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableWithoutFeedback, TouchableNativeFeedback, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableWithoutFeedback, Modal, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, selectLoading } from '../redux/reducers/user';
 import Loading from '../atoms/Loading';
+import colors from '../style/colors.json';
 
 const Login = (props) => {
 
@@ -11,7 +12,7 @@ const Login = (props) => {
 
     let loginField = React.createRef();
     let passwordField = React.createRef();
-    let [buttonMargin, setButtonMargin] = React.useState('10%');
+    let [buttonMargin, setButtonMargin] = React.useState('30%');
     let [username, setUsername] = React.useState('');
     let [password, setPassword] = React.useState('');
 
@@ -38,6 +39,21 @@ const Login = (props) => {
                     >
                     <Loading />
                 </Modal>
+                <View
+                    style={{
+                        marginBottom: '20%',
+                    }}
+                    >
+                    <Text
+                        style={{
+                            fontSize: 30,
+                            fontWeight: '900',
+                            color: colors.iceberg,
+                        }}
+                        >
+                        ДОДАТОК ПАЦІЄНТА
+                    </Text>
+                </View>
                 <View style={{
                     borderWidth: 0.5,
                     width: '80%',
@@ -46,6 +62,7 @@ const Login = (props) => {
                     paddingVertical: '2%',
                     paddingLeft: '2%',
                     marginBottom: '2%',
+                    backgroundColor: '#FFF',
                     }}>
                     <TextInput
                         ref={loginField}
@@ -64,6 +81,7 @@ const Login = (props) => {
                     paddingVertical: '2%',
                     paddingLeft: '2%',
                     marginBottom: '10%',
+                    backgroundColor: '#FFF',
                     }}>
                     <TextInput
                         ref={passwordField}
@@ -75,7 +93,7 @@ const Login = (props) => {
                         secureTextEntry
                         />
                 </View>
-                <TouchableNativeFeedback onPress={() => makeLogin(username, password)}>
+                <TouchableOpacity onPress={() => makeLogin(username, password)}>
                     <View style={{
                         borderRadius: 10,
                         backgroundColor: '#77ABCF',
@@ -83,8 +101,8 @@ const Login = (props) => {
                         justifyContent: 'center',
                         marginTop: '5%',
                         marginBottom: '5%',
-                        width: '30%',
                         paddingVertical: '2%',
+                        paddingHorizontal: '10%',
                         }}>
                         <Text style={{
                             fontSize: 20,
@@ -92,8 +110,8 @@ const Login = (props) => {
                             Увійти
                         </Text>
                     </View>
-                </TouchableNativeFeedback>
-                <TouchableNativeFeedback onPress={() => props.navigation.navigate('register')}>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => props.navigation.navigate('register')}>
                     <View style={{
                         borderRadius: 10,
                         backgroundColor: '#77ABCF',
@@ -109,7 +127,7 @@ const Login = (props) => {
                             Зареєструватися
                         </Text>
                     </View>
-                </TouchableNativeFeedback>
+                </TouchableOpacity>
             </View>
         </TouchableWithoutFeedback>
     );
