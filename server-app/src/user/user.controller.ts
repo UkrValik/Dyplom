@@ -12,9 +12,12 @@ import { diskStorage } from  'multer';
 import { extname } from  'path';
 import { FileInterceptor } from '@nestjs/platform-express';
 
+import { config } from '../config';
+
 @Controller('user')
 export class UserController {
-    SERVER_URL: string = 'http://1ab42c5ed62d.ngrok.io/';
+
+    SERVER_URL: string = config.ngrokUrl;
     constructor(private userService: UserService) {}
 
     @Post('update/data')

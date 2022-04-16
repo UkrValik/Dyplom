@@ -70,4 +70,9 @@ export class UserService {
         const newUser = await this.userModel.findOneAndUpdate({_id: user_id}, {avatar: avatar});
         return newUser;
     }
+
+    async addDocument(user_id: string, document: string) {
+        const newUser = await this.userModel.findOneAndUpdate({_id: user_id}, {'$push': {'documents': document}});
+        return newUser;
+    }
 }

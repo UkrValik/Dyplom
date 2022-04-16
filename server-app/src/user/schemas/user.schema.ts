@@ -7,6 +7,7 @@ export type UserDocument = User & mongoose.Document;
 
 @Schema()
 export class User {
+    
     @Prop({ unique: true, required: true })
     email: string;
 
@@ -33,6 +34,7 @@ export class User {
 
     @Prop()
     avatar: string;
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

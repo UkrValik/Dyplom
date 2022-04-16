@@ -10,6 +10,7 @@ import { RolesModule } from './roles/roles.module';
 import { ChatModule } from './chat/chat.module';
 import { ConsultationModule } from './consultation/consultation.module';
 import { ChatroomModule } from './chatroom/chatroom.module';
+import { DocumentsModule } from './documents/documents.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -28,6 +29,7 @@ import * as Joi from '@hapi/joi';
     ChatModule,
     ConsultationModule,
     ChatroomModule,
+    DocumentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
