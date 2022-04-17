@@ -11,8 +11,8 @@ export class DocumentsService {
         @InjectModel(Documents.name) private documentsModel: Model<DocumentsDocument>,
     ) {}
 
-    async create(user: User, path: string) {
-        const createdDocument = new this.documentsModel({user, path});
+    async create(user: User, path: string, name: string) {
+        const createdDocument = new this.documentsModel({user, path, name});
         return await createdDocument.save();
     }
 

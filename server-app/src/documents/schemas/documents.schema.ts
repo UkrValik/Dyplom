@@ -13,6 +13,9 @@ export class Documents {
     @Prop({ required: true })
     path: string;
 
+    @Prop({ type: String, required: true })
+    name: string;
+
 }
 
 export const DocumentsSchema = SchemaFactory.createForClass(Documents);
