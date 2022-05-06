@@ -13,7 +13,9 @@ import { extname } from  'path';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { config } from '../config';
+import { ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('user')
 @Controller('user')
 export class UserController {
 
@@ -23,6 +25,7 @@ export class UserController {
     @Post('update/data')
     @Roles(Role.Doctor)
     @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiForbiddenResponse()
     updateUserData(@Body() body: UpdateUserDataDto) {
         return this.userService.updateUserDataById(body);
     }

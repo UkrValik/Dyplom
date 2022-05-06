@@ -10,6 +10,7 @@ import { Message, MessageDocument } from './schemas/message.schema';
 
 @Injectable()
 export class ChatroomService {
+
     constructor(
         @InjectModel(Chatroom.name) private chatroomModel: Model<ChatroomDocument>,
         @InjectModel(Message.name) private messageModel: Model<MessageDocument>,
@@ -31,7 +32,7 @@ export class ChatroomService {
     }
 
     async findByUser(user: UserDocument) {
-        const chatrooms = await this.chatroomModel.find({users: {$in: [user]}}).exec();
+        const chatrooms = await this.chatroomModel.find({users: {$in: [user]}, finished_at: {$exists: false}}).exec();
         for (let chat in chatrooms) {
             for (let user in chatrooms[chat].users) {
                 chatrooms[chat].users[user] = await this.userService.getById(chatrooms[chat].users[user]._id);
@@ -46,4 +47,9 @@ export class ChatroomService {
     async findById(chat_id: string) {
         return await (await this.chatroomModel.findById(chat_id)).execPopulate();
     }
+
+    async findOneAndUpdate(findCriteria, updates) {
+        return this.chatroomModel.findOneAndUpdate(findCriteria, updates);
+    }
+
 }

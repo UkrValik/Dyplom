@@ -21,8 +21,13 @@ export const answer = createAsyncThunk('consultation/answer', async params => {
         }),
     });
     const resJSON = await response.json();
-    console.log(resJSON);
 });
+
+export const finish = createAsyncThunk('consultation/finish', async params => {
+    const response = await fetch(config.baseUrl + '/consultation/finish/' + params.consultationId);
+    const resJSON = await response.json();
+    console.log(resJSON);
+})
 
 const initialState = {
     proposals: [],
@@ -37,7 +42,7 @@ export const consultationSlice = createSlice({
     extraReducers: {
         [getProposals.fulfilled]: (state, action) => {
             state.proposals = action.payload;
-        }
+        },
     }
 });
 

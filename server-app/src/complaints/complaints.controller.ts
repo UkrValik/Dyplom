@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongoose';
 import JwtAuthGuard from 'src/auth/jwtAuth.guard';
 import { Role } from 'src/roles/role.enum';
@@ -8,6 +9,7 @@ import { ComplaintsService } from './complaints.service';
 import { UpdateComplaintDto } from './dto';
 import { RequestWithUser } from './requestWithUser.interface';
 
+@ApiTags('complaints')
 @Controller('complaints')
 export class ComplaintsController {
     constructor(private complaintsService: ComplaintsService) {}

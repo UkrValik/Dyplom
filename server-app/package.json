@@ -22,15 +22,16 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "@nestjs/common": "^7.6.15",
+    "@nestjs/common": "^8.4.4",
     "@nestjs/config": "^0.6.3",
-    "@nestjs/core": "^7.6.15",
+    "@nestjs/core": "^8.4.4",
     "@nestjs/jwt": "^7.2.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/mongoose": "^7.2.4",
     "@nestjs/passport": "^7.1.5",
-    "@nestjs/platform-express": "^7.6.15",
+    "@nestjs/platform-express": "^8.4.4",
     "@nestjs/platform-socket.io": "^7.6.15",
+    "@nestjs/swagger": "^5.2.1",
     "@nestjs/websockets": "^7.6.15",
     "@types/bcrypt": "^3.0.1",
     "@types/cookie-parser": "^1.4.2",
@@ -48,7 +49,8 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
-    "socket.io": "^2.4.1"
+    "socket.io": "^2.4.1",
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",

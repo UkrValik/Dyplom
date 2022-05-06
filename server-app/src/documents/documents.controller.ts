@@ -14,7 +14,9 @@ import { RolesGuard } from 'src/roles/roles.guard';
 import { DocumentsService } from './documents.service';
 
 import { config } from '../config';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('documents')
 @Controller('documents')
 export class DocumentsController {
 

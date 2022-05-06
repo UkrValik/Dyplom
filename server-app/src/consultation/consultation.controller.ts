@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import JwtAuthGuard from 'src/auth/jwtAuth.guard';
 import { RequestWithUser } from 'src/complaints/requestWithUser.interface';
 import { Role } from 'src/roles/role.enum';
@@ -7,6 +8,7 @@ import { RolesGuard } from 'src/roles/roles.guard';
 import { ConsultationService } from './consultation.service';
 import { PatientAnswerDto, ProposeConsultationDto } from './dto';
 
+@ApiTags('consultation')
 @Controller('consultation')
 export class ConsultationController {
     constructor(private consultationService: ConsultationService) {}
@@ -32,4 +34,15 @@ export class ConsultationController {
     patientAnswer(@Body() patientAnswerDto: PatientAnswerDto) {
         return this.consultationService.patientAnswer(patientAnswerDto);
     }
+
+    @Get('finish/:id')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Patient, Role.Doctor)
+    @ApiResponse({ status: 200, description: 'Successfully finished consultation' })
+    @ApiForbiddenResponse({ description: 'Forbidden' })
+    async finishConsultation(@Param('id') id: string) {
+        console.log('finished consultation:', id);
+        return this.consultationService.finishConsultation(id);
+    }
+
 }

@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose';
 import { ChatroomDocument } from 'src/chatroom/schemas/chatroom.schema';
 import { ComplaintDocument } from 'src/complaints/schemas/complaints.schema';
 import { UserDocument } from 'src/user/schemas/user.schema';
+import { ConsultationStatusEnum } from '../enums/consultation-status.enum';
 
 export type ConsultationDocument = Consultation & mongoose.Document;
 
@@ -22,6 +23,9 @@ export class Consultation {
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Chatroom'})
     chatroom: ChatroomDocument;
+
+    @Prop({ type: ConsultationStatusEnum })
+    status: ConsultationStatusEnum;
 }
 
 export const ConsultationSchema = SchemaFactory.createForClass(Consultation);

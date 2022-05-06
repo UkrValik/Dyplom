@@ -6,6 +6,7 @@ import { CreateChatroomDto } from 'src/chatroom/dto';
 import { ComplaintDocument } from 'src/complaints/schemas/complaints.schema';
 import { UserService } from 'src/user/user.service';
 import { PatientAnswerDto, ProposeConsultationDto } from './dto';
+import { ConsultationStatusEnum } from './enums/consultation-status.enum';
 import { Consultation, ConsultationDocument } from './schemas/consultation.schema';
 
 @Injectable()
@@ -17,7 +18,7 @@ export class ConsultationService {
         ) {}
 
     public async propose(proposeConsultationDto: ProposeConsultationDto) {
-        const createdConsultation = new this.consultationModel(proposeConsultationDto);
+        const createdConsultation = new this.consultationModel({ ...proposeConsultationDto, status: ConsultationStatusEnum.PENDING });
         return createdConsultation.save();
     }
 
@@ -35,13 +36,38 @@ export class ConsultationService {
     public async patientAnswer(patientAnswerDto: PatientAnswerDto) {
         const doctor = await this.userService.getById(patientAnswerDto.doctor_id);
         const patient = await this.userService.getById(patientAnswerDto.patient_id);
-        const chatroom = await this.chatroomService.create({users: [doctor, patient]});
-        return this.consultationModel.findOneAndUpdate({
-            _id: patientAnswerDto.consult_id,
+        if (patientAnswerDto.answer) {
+            const chatroom = await this.chatroomService.create({users: [doctor, patient]});
+            return this.consultationModel.findOneAndUpdate({
+                _id: patientAnswerDto.consult_id,
+            }, {
+                answer: patientAnswerDto.answer,
+                answerDate: new Date().toISOString(),
+                chatroom: chatroom,
+                status: ConsultationStatusEnum.APROVED,
+            });
+        } else {
+            return this.consultationModel.findOneAndUpdate({
+                _id: patientAnswerDto.consult_id,
+            }, {
+                answer: patientAnswerDto.answer,
+                answerDate: new Date().toISOString(),
+                status: ConsultationStatusEnum.REJECTED,
+            });
+        }
+    }
+
+    public async finishConsultation(id: string) {
+        const consultation = await this.consultationModel.findOneAndUpdate({
+            _id: id,
         }, {
-            answer: patientAnswerDto.answer,
-            answerDate: new Date().toISOString(),
-            chatroom: chatroom,
+            status: ConsultationStatusEnum.FINISHED,
+        });
+        await this.chatroomService.findOneAndUpdate({
+            _id: consultation.chatroom,
+        }, {
+            finished_at: () => new Date().toISOString(),
         });
     }
+
 }

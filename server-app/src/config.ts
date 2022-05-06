@@ -1,3 +1,3 @@
 export const config = (() => ({
-    "ngrokUrl": "http://c77b-194-44-34-93.ngrok.io"
+    "ngrokUrl": "http://e761-194-44-34-204.ngrok.io"
 }))()
