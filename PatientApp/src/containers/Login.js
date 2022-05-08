@@ -1,18 +1,20 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableWithoutFeedback, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableWithoutFeedback, Modal, TouchableOpacity, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, selectLoading } from '../redux/reducers/user';
+import { login, saveError, selectError, selectLoading } from '../redux/reducers/user';
 import Loading from '../atoms/Loading';
 import colors from '../style/colors.json';
+import fonts from '../style/fonts.json';
 
 const Login = (props) => {
 
     const dispatch = useDispatch();
     const loading = useSelector(selectLoading);
+    const errorOnLogin = useSelector(selectError);
 
     let loginField = React.createRef();
     let passwordField = React.createRef();
-    let [buttonMargin, setButtonMargin] = React.useState('30%');
+    let [buttonMargin, setButtonMargin] = React.useState('10%');
     let [username, setUsername] = React.useState('');
     let [password, setPassword] = React.useState('');
 
@@ -22,8 +24,22 @@ const Login = (props) => {
     }
 
     const makeLogin = (username, password) => {
+        blurInput();
+        dispatch(saveError(null));
         dispatch(login({username, password}));
     }
+
+    const onTextFieldFocus = () => {
+        setButtonMargin('80%');
+        dispatch(saveError(null));
+    }
+
+    const onPressRegister = () => {
+        dispatch(saveError(null));
+        props.navigation.navigate('register');
+    }
+
+    let errorText = errorOnLogin ? 'Неправильний логін або пароль' : '';
 
     return (
         <TouchableWithoutFeedback onPress={() => blurInput()}>
@@ -49,13 +65,27 @@ const Login = (props) => {
                             fontSize: 30,
                             fontWeight: '900',
                             color: colors.iceberg,
+                            fontFamily: fonts.ios,
                         }}
                         >
                         ДОДАТОК ПАЦІЄНТА
                     </Text>
                 </View>
+                <View>
+                    <Text style={{
+                        fontFamily: fonts.ios,
+                        fontSize: 20,
+                        fontWeight: '700',
+                        color: colors.tartorange,
+                        textAlign: 'center',
+                    }}>
+                        {errorText}
+                    </Text>
+                </View>
                 <View style={{
                     borderWidth: 0.5,
+                    borderColor: colors.iceberg,
+                    borderRadius: 5,
                     width: '80%',
                     marginVertical: '5%',
                     marginHorizontal: '10%',
@@ -68,66 +98,65 @@ const Login = (props) => {
                         ref={loginField}
                         placeholder='Логін'
                         style={{fontSize: 16}}
-                        onFocus={() => setButtonMargin('80%')}
+                        onFocus={onTextFieldFocus}
                         onBlur={() => setButtonMargin('20%')}
                         onChangeText={(text) => setUsername(text)}
                         />
                 </View>
                 <View style={{
                     borderWidth: 0.5,
+                    borderColor: colors.iceberg,
+                    borderRadius: 5,
+                    backgroundColor: '#FFF',
                     width: '80%',
                     marginVertical: '5%',
                     marginHorizontal: '10%',
                     paddingVertical: '2%',
                     paddingLeft: '2%',
                     marginBottom: '10%',
-                    backgroundColor: '#FFF',
                     }}>
                     <TextInput
                         ref={passwordField}
                         placeholder='Пароль'
                         style={{fontSize: 16}}
-                        onFocus={() => setButtonMargin('80%')}
+                        onFocus={onTextFieldFocus}
                         onBlur={() => setButtonMargin('20%')}
                         onChangeText={(text) => setPassword(text)}
                         secureTextEntry
                         />
                 </View>
-                <TouchableOpacity onPress={() => makeLogin(username, password)}>
-                    <View style={{
-                        borderRadius: 10,
-                        backgroundColor: '#77ABCF',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginTop: '5%',
-                        marginBottom: '5%',
-                        paddingVertical: '2%',
-                        paddingHorizontal: '10%',
-                        }}>
-                        <Text style={{
-                            fontSize: 20,
-                            }}>
-                            Увійти
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.navigation.navigate('register')}>
-                    <View style={{
-                        borderRadius: 10,
-                        backgroundColor: '#77ABCF',
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                <View
+                    style={{
+                        backgroundColor: '#FFF',
+                        paddingHorizontal: '5%',
+                        borderRadius: 5,
+                        borderWidth: 0.5,
+                        borderColor: colors.iceberg,
+                        marginBottom: '3%',
+                    }}
+                    >
+                    <Button
+                        title='Увійти'
+                        color={colors.iceberg}
+                        onPress={() => makeLogin(username, password)}
+                        />
+                </View>
+                <View
+                    style={{
+                        // borderRadius: 5,
+                        // borderWidth: 0.5,
+                        // borderColor: colors.ashGrey,
+                        paddingHorizontal: '5%',
                         marginBottom: buttonMargin,
-                        paddingHorizontal: '10%',
-                        paddingVertical: '2%',
-                        }}>
-                        <Text style={{
-                            fontSize: 20,
-                            }}>
-                            Зареєструватися
-                        </Text>
-                    </View>
-                </TouchableOpacity>
+                        // backgroundColor: '#FFF',
+                    }}
+                    >
+                    <Button
+                        title='Зареєструватися'
+                        color={colors.iceberg}
+                        onPress={onPressRegister}
+                        />
+                </View>
             </View>
         </TouchableWithoutFeedback>
     );

@@ -1,6 +1,5 @@
-import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ObjectId } from 'mongoose';
 import JwtAuthGuard from 'src/auth/jwtAuth.guard';
 import { Role } from 'src/roles/role.enum';
 import { Roles } from 'src/roles/roles.decorator';
@@ -56,8 +55,7 @@ export class ComplaintsController {
     @Get(':id')
     @Roles(Role.Patient)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    findById(@Req() request: RequestWithUser) {
-        const {user} = request;
-        return this.complaintsService.findById(user.complaint._id);
+    findById(@Param('id') id: string) {
+        return this.complaintsService.findById(id);
     }
 }

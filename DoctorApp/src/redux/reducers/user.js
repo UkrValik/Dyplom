@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { create } from 'react-test-renderer';
 import config from '../../config.json';
 
 export const login = createAsyncThunk('user/login', async params => {
@@ -14,12 +13,12 @@ export const login = createAsyncThunk('user/login', async params => {
         }),
     });
     const token = response.headers.get('set-cookie').split('=')[1].split(';')[0];
-    const responseJSON = await response.json();
-    return {token, user: responseJSON};
+    const user = await response.json();
+    return {token, user: user};
 });
 
 export const register = createAsyncThunk('user/register', async params => {
-    await fetch(config.baseUrl + '/auth/register', {
+    const registerResponse = await fetch(config.baseUrl + '/auth/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -30,6 +29,10 @@ export const register = createAsyncThunk('user/register', async params => {
             roles: ['doctor'],
         }),
     });
+    const registerResponseJSON = await registerResponse.json();
+    if (registerResponseJSON.statusCode === 400) {
+        throw new Error('User already exists');
+    }
     const responseLogin = await fetch(config.baseUrl + '/auth/dlogin', {
         method: 'POST',
         headers: {
@@ -41,7 +44,8 @@ export const register = createAsyncThunk('user/register', async params => {
         }),
     });
     const token = responseLogin.headers.get('set-cookie').split('=')[1].split(';')[0];
-    return token;
+    const responseLoginJSON = await responseLogin.json();
+    return { token, user: responseLoginJSON };
 });
 
 export const getAllComplaints = createAsyncThunk('user/getAllComplaint', async () => {
@@ -125,6 +129,9 @@ export const userSlice = createSlice({
         },
         saveLastname: (state, action) => {
             state.lastname = action.payload;
+        },
+        saveError: (state, action) => {
+            state.error = action.payload;
         }
     },
     extraReducers: {
@@ -145,8 +152,14 @@ export const userSlice = createSlice({
             state.loading = true;
         },
         [register.fulfilled]: (state, action) => {
-            state.token = action.payload;
+            state.token = action.payload.token;
             state.loading = false;
+            state.error = undefined;
+            state.username = action.payload.user.email;
+            state._id = action.payload.user._id;
+            state.firstname = action.payload.user.firstname;
+            state.lastname = action.payload.user.lastname;
+            state.avatar = action.payload.user.avatar;
         },
         [register.rejected]: (state, action) => {
             state.error = action.error;
@@ -180,6 +193,7 @@ export const userSlice = createSlice({
 export const {
     saveFirstname,
     saveLastname,
+    saveError,
 } = userSlice.actions;
 
 export default userSlice.reducer;
@@ -190,3 +204,4 @@ export const selectUser = state => state.user;
 export const selectToken = state => state.user.token;
 export const selectLoading = state => state.user.loading;
 export const selectComplaints = state => state.user.complaints;
+export const selectError = state => state.user.error;

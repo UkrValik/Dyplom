@@ -24,8 +24,7 @@ export class AuthService {
             createdUser.password = undefined;
             return createdUser;
         } catch(error) {
-            console.log(error);
-            throw new HttpException('Something went wrong', HttpStatus.BAD_REQUEST);
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -39,7 +38,6 @@ export class AuthService {
             createdUser.password = undefined;
             return createdUser;
         } catch(error) {
-            console.log(error);
             throw new HttpException('Something went wrong', HttpStatus.BAD_REQUEST);
         }
     }

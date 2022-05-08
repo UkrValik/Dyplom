@@ -12,17 +12,18 @@ export const login = createAsyncThunk('user/login', async params => {
             password: params.password,
         }),
     });
-    const complaintResponse = await fetch(config.baseUrl + '/complaints/' + params.id, {
-        method: 'GET',
-    });
+    const user = await response.json();
+    if (user.statusCode === 400) {
+        throw new Error('Wrong credentials');
+    }
+    const complaintResponse = await fetch(config.baseUrl + '/complaints/' + user.complaint);
     const complaint = await complaintResponse.json();
     const token = response.headers.get('set-cookie').split('=')[1].split(';')[0];
-    const responseJSON = await response.json();
-    return {token, user: responseJSON, complaint: complaint};
+    return {token, user, complaint};
 });
 
 export const register = createAsyncThunk('user/register', async params => {
-    await fetch(config.baseUrl + '/auth/register', {
+    const registerResponse = await fetch(config.baseUrl + '/auth/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -33,6 +34,10 @@ export const register = createAsyncThunk('user/register', async params => {
             roles: ['patient'],
         }),
     });
+    const registerResponseJSON = await registerResponse.json();
+    if (registerResponseJSON.statusCode === 400) {
+        throw new Error('User already exists');
+    }
     const responseLogin = await fetch(config.baseUrl + '/auth/plogin', {
         method: 'POST',
         headers: {
@@ -43,8 +48,11 @@ export const register = createAsyncThunk('user/register', async params => {
             password: params.password,
         }),
     });
+    const responseLoginJSON = await responseLogin.json();
+    const complaintResponse = await fetch(config.baseUrl + '/complaints/' + responseLoginJSON.complaint);
+    const complaint = await complaintResponse.json();
     const token = responseLogin.headers.get('set-cookie').split('=')[1].split(';')[0];
-    return token;
+    return { token, user: responseLoginJSON, complaint };
 });
 
 export const publishComplaintData = createAsyncThunk('user/publishComplaintData', async params => {
@@ -121,6 +129,9 @@ export const userSlice = createSlice({
         },
         savePublishDate: (state, action) => {
             state.complaint.publishDate = action.payload;
+        },
+        saveError: (state, action) => {
+            state.error = action.payload;
         }
     },
     extraReducers: {
@@ -143,8 +154,16 @@ export const userSlice = createSlice({
             state.loading = true;
         },
         [register.fulfilled]: (state, action) => {
-            state.token = action.payload;
+            state.token = action.payload.token;
             state.loading = false;
+            state.error = undefined;
+            state.complaint._id = action.payload.user.complaint;
+            state.username = action.payload.user.email;
+            state._id = action.payload.user._id;
+            state.complaint.text = action.payload.complaint.text;
+            state.complaint.doctor = action.payload.complaint.doctor;
+            state.complaint.published = action.payload.complaint.published;
+            state.complaint.publishDate = action.payload.complaint.dateTime;
         },
         [register.rejected]: (state, action) => {
             state.error = action.error;
@@ -173,6 +192,7 @@ export const {
     saveComplaintText,
     saveComplaintDoctor,
     savePublishDate,
+    saveError,
 } = userSlice.actions;
 
 export default userSlice.reducer;
@@ -182,3 +202,4 @@ export const selectUser = state => state.user;
 export const selectToken = state => state.user.token;
 export const selectLoading = state => state.user.loading;
 export const selectComplaint = state => state.user.complaint;
+export const selectError = state => state.user.error;

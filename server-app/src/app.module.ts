@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,11 +11,12 @@ import { ChatModule } from './chat/chat.module';
 import { ConsultationModule } from './consultation/consultation.module';
 import { ChatroomModule } from './chatroom/chatroom.module';
 import { DocumentsModule } from './documents/documents.module';
+import { CommonMiddleware } from './middleware/common.middleware';
 import * as Joi from '@hapi/joi';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/nest'),
+    MongooseModule.forRoot('mongodb://127.0.0.1:27017/nest'),
     ComplaintsModule,
     AuthModule,
     UserModule,
@@ -34,4 +35,10 @@ import * as Joi from '@hapi/joi';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CommonMiddleware)
+      .forRoutes('*');
+  }
+}

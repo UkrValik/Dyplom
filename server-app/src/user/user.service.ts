@@ -5,6 +5,7 @@ import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto, UpdateUserDataDto } from './dto';
 import { ComplaintsService } from 'src/complaints/complaints.service';
 import { Role } from 'src/roles/role.enum';
+import { Complaint, ComplaintDocument } from 'src/complaints/schemas/complaints.schema';
 
 @Injectable()
 export class UserService {
@@ -30,7 +31,13 @@ export class UserService {
     }
 
     async createPatient(createUserDto: CreateUserDto) {
-        const complaint = await this.complaintsService.create({published: false});
+        const userExisted = await this.userModel.findOne({email: createUserDto.email});
+        let complaint: ComplaintDocument | Complaint;
+        if (userExisted) {
+            complaint = await this.complaintsService.findById(userExisted.complaint._id);
+        } else {
+            complaint = await this.complaintsService.create({published: false});
+        }
         let createdUser = new this.userModel({
             ...createUserDto,
             complaint: complaint,
